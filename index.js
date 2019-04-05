@@ -1,5 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
-import resolvers from "../_Build_a_MovieApi_with_GraphQL/graphql/resolvers";
+import resolvers from "./graphql/resolvers";
 
 const server = new GraphQLServer({
     typeDefs: "graphql/schema.graphql",
