@@ -1,0 +1,9 @@
+{
+  "name": "Build_a_MovieApi_with_GraphQL",
+  "version": "1.0.0",
+  "description": "Build_a_MovieApi_with_GraphQL",
+  "main": "index.js",
+  "repository": "https://github.com/hopelife/Build_a_MovieApi_with_GraphQL.git",
+  "author": "deverlife <deverlife@gmail.com>",
+  "license": "MIT"
+}

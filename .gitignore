@@ -1,0 +1,12 @@
+# Yarn integrity file
+.yarn-integrity
+
+# dotenv environment variable file
+.environment
+dist
+
+# git
+.git
+
+# node
+node_modules

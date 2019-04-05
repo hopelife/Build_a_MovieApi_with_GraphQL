@@ -1,0 +1,21 @@
+{
+  "name": "Build_a_MovieApi_with_GraphQL",
+  "version": "1.0.0",
+  "description": "Build a MovieApi with GraphQL(https://academy.nomadcoders.co/courses/enrolled/357405)",
+  "main": "index.js",
+  "repository": "https://github.com/hopelife/Build_a_MovieApi_with_GraphQL.git",
+  "author": "??? <deverlife@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.17.1",
+    "nodemon": "^1.18.10"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1"
+  }
+}
