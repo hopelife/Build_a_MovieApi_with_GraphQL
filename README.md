@@ -152,3 +152,240 @@ query {
 }
 ```
 
+## #5 Extending the Schema
+
+### schema.graphql
+
+```
+type Person {
+    name: String!
+    age: Int!
+    gender: String!
+}
+
+type Query {
+    person: Person!
+}
+```
+
+### resolvers.js
+
+```
+type Person {
+    name: String!
+    age: Int!
+    gender: String!
+}
+
+type Query {
+    person: Person!
+}
+```
+
+
+### 브라우저 확인
+
+```
+http://localhost:4000/
+
+# query
+
+query {
+  person {
+    name
+  }
+}
+
+
+
+# response
+
+{
+  "data": {
+    "person": {
+      "name": "Moon"
+    }
+  }
+}
+```
+
+## #6 Extending the Schema part Two
+
+### schema.graphql
+
+```
+type Person {
+    id: Int!
+    name: String!
+    age: Int!
+    gender: String!
+}
+
+type Query {
+    people: [Person]!
+    person(id: Int!): Person!
+}
+```
+
+### db.js 생성
+```
+export const people = [
+  {
+      id: 1,
+      name: "Moon",
+      age: 50,
+      gender: "male"
+  },
+  {
+      id: 2,
+      name: "Ann",
+      age: 16,
+      gender: "female"
+  },
+  {
+      id: 3,
+      name: "Nicolas",
+      age: 23,
+      gender: "male"
+  }
+];
+
+export const getById = id => {
+    const filteredPeople = people.filter(person => people.id === id );
+    return filteredPeople[0]
+}
+```
+
+
+### resolvers.js
+
+```
+import { people, getById } from "./db";
+
+const resolvers = {
+  Query: {
+      people: () => people,
+      person: () => getById()
+  }
+};
+
+export default resolvers;
+```
+
+
+### 브라우저 확인
+
+```
+http://localhost:4000/
+
+# query
+query {
+  people {
+    id
+    name
+    gender
+  }
+}
+
+
+
+# response
+{
+  "data": {
+    "person": {
+      "name": "Moon"
+    }
+  }
+}
+```
+
+
+## #7 Creating Queries with Arguments
+
+### schema.graphql
+
+```
+type Person {
+    id: Int!
+    name: String!
+    age: Int!
+    gender: String!
+}
+
+type Query {
+    people: [Person]!
+    person(id: Int!): Person!
+}
+```
+
+### db.js
+```
+export const people = [
+  {
+      id: 1,
+      name: "Moon",
+      age: 50,
+      gender: "male"
+  },
+  {
+      id: 2,
+      name: "Ann",
+      age: 16,
+      gender: "female"
+  },
+  {
+      id: 3,
+      name: "Nicolas",
+      age: 23,
+      gender: "male"
+  }
+];
+
+export const getById = id => {
+    const filteredPeople = people.filter(person => person.id === id );
+    return filteredPeople[0]
+}
+```
+
+### resolvers.js
+```
+import { people, getById } from "./db";
+
+const resolvers = {
+  Query: {
+      people: () => people,
+      person: (_, {id}) => getById(id)
+  }
+};
+
+export default resolvers;
+```
+
+
+### 브라우저 확인
+
+```
+http://localhost:4000/
+
+# query
+query {
+  person(id: 2) {
+    gender
+    name
+  }
+}
+
+
+
+
+# response
+{
+  "data": {
+    "person": {
+      "gender": "female",
+      "name": "Ann"
+    }
+  }
+}
+```
+
