@@ -546,7 +546,7 @@ query {
 
 
 ## #9 Creating first Mutation
-- [github #9]()
+- [github #9](https://github.com/nomadcoders/movieql/tree/3ead4cfdf6d53a99aceec350fb3598dd93ef40b1)
 
 ### schema.graphql
 ```
@@ -569,31 +569,116 @@ query {
 http://localhost:4000/
 
 # query
-
+mutation {
+	addMovie(name: "RockandRolla", score:9) {
+		name
+	}
+}
 
 
 # response
-
+{
+  "data": {
+    "addMovie": {
+      "name": "RockandRolla"
+    }
+  }
+}
 ```
 
 
 
 ## #10 Delete Mutation
-- [github #10]()
+- [github #10](https://github.com/nomadcoders/movieql/tree/2d2c5d81765ce53b8502d3fedc82ab0e1998fe7e)
 
 ### schema.graphql
 ```
+type Movie {
+  id: Int!
+  name: String!
+  score: Int!
+}
 
+type Query {
+  movies: [Movie]!
+  movie(id: Int!): Movie
+}
+
+type Mutation {
+  addMovie(score: Int!, name: String!): Movie!
+  deleteMovie(id: Int!): Boolean!
+}
 ```
 
 ### resolves.js
 ```
+import { getMovies, getById, addMovie, deleteMovie } from "./db";
 
+const resolvers = {
+  Query: {
+    movies: () => getMovies(),
+    movie: (_, { id }) => getById(id)
+  },
+  Mutation: {
+    addMovie: (_, { name, score }) => addMovie(name, score),
+    deleteMovie: (_, { id }) => deleteMovie(id)
+  }
+};
+
+export default resolvers;
 ```
 
 ### db.js
 ```
+let movies = [
+  {
+    id: 0,
+    name: "Star Wars - The new one",
+    score: 1
+  },
+  {
+    id: 1,
+    name: "Avengers - The new one",
+    score: 8
+  },
+  {
+    id: 2,
+    name: "The Godfather I",
+    score: 99
+  },
+  {
+    id: 3,
+    name: "Logan",
+    score: 2
+  }
+];
 
+export const getMovies = () => movies;
+
+export const getById = id => {
+  const filteredMovies = movies.filter(movie => movie.id === id);
+  return filteredMovies[0];
+};
+
+export const deleteMovie = id => {
+  const cleanedMovies = movies.filter(movie => movie.id !== id);
+  if (movies.length > cleanedMovies.length) {
+    movies = cleanedMovies;
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const addMovie = (name, score) => {
+  const newMovie = {
+    id: `${movies.length + 1}`,
+    name,
+    score
+  };
+  movies.push(newMovie);
+  return newMovie;
+};
 ```
 
 ### 브라우저 확인
@@ -602,15 +687,32 @@ http://localhost:4000/
 http://localhost:4000/
 
 # query
-
+mutation {
+	deleteMovie(id: 0)
+}
 
 
 # response
-
+{
+  "data": {
+    "deleteMovie": true
+  }
+}
 ```
 
 ## #11 Wrapping a REST API with GraphQL Part One
 - [github #11]()
+
+### chrome json prettifier 설치
+- [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=ko)
+
+### Movie List provider
+- [YTS.AM List Setting](https://yts.am/api#list_movies)
+- [YTS.AM List](https://yts.am/api/v2/list_movies.json?limit=50&minimum_rating=9)
+
+
+### node-fetch
+- [node-fetch Usage](https://github.com/bitinn/node-fetch#common-usage)
 
 ### schema.graphql
 ```
